@@ -1,4 +1,3 @@
-// "use client";
 import axios from "axios";
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -19,9 +18,23 @@ export const getHeaders = () => {
   }
 };
 
-const request = axios.create({
+const axiosInstance = axios.create({
   baseURL: apiUrl,
   headers: getHeaders(),
 });
 
-export default request;
+// make sure has token after login
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("user_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default axiosInstance;

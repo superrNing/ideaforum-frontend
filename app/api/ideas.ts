@@ -3,7 +3,7 @@ import request from "@/app/utils/request";
 // list
 export const ideas = async (params?: any) => {
   const base_url = "/api/ideas";
-  const res = await request.get(base_url, params);
+  const res = await request.get(base_url, { params });
   return res;
 };
 

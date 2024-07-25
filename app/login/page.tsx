@@ -67,21 +67,9 @@ export default function SignInSide() {
 
       if (res?.status === 200) {
         toast.success("logged in!");
-        // setToastType("success");
-        // setloginToast(true);
-        // setToastMessage();
         localStorage.setItem("user_token", res?.data?.token);
         router.push("/");
       }
-      // if (res?.code === 200) {
-
-      //   setToken(res?.token);
-      //   let userRes = await refetch?.();
-      //   console.log("userRes", userRes);
-      //   setUser(userRes.data);
-      //   navigate("/");
-      //   return;
-      // }
     },
     onError: (error) => {
       toast.error("Wrong email or password");

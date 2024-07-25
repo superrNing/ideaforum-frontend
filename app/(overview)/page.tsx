@@ -58,7 +58,7 @@ export default async function Page() {
               {rows?.map((row) => (
                 <TableRow
                   hover={true}
-                  key={row.name}
+                  key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell className="hover:text-blue-500">
