@@ -71,7 +71,7 @@ export default function SignInSide() {
         // setloginToast(true);
         // setToastMessage();
         localStorage.setItem("user_token", res?.data?.token);
-        router.push("/dashboard");
+        router.push("/");
       }
       // if (res?.code === 200) {
 
