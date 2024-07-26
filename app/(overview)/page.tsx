@@ -47,17 +47,17 @@ export default async function Page() {
         <TableContainer
           className="no-scrollbar"
           component={Paper}
-          sx={{ maxHeight: "84vh" }}
+          sx={{ maxHeight: "82vh" }}
         >
           <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Content</TableCell>
-                <TableCell>Likes</TableCell>
-                <TableCell>Comments</TableCell>
-                <TableCell>Create At</TableCell>
-                <TableCell>Update At</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Content</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Likes</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Comments</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Create At</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>Update At</TableCell>
               </TableRow>
             </TableHead>
             <TableBody className="cursor-pointer">
