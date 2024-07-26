@@ -21,24 +21,6 @@ import { useRouter } from "next/navigation";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 import toast from "react-hot-toast";
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
@@ -63,7 +45,7 @@ export default function AddIdea() {
       }
     },
     onError: (error) => {
-      toast.error("Wrong email or password");
+      toast.error("Something Wrong");
       console.log(error, "error");
     },
   });
@@ -77,7 +59,7 @@ export default function AddIdea() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="lg">
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <Box
           sx={{
             marginTop: 8,
