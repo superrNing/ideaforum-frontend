@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { userLogin, UserLoginParams } from "@/app/api/login";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Snackbar, Alert } from "@mui/material";
@@ -68,6 +68,7 @@ export default function SignInSide() {
       if (res?.status === 200) {
         toast.success("logged in!");
         localStorage.setItem("user_token", res?.data?.token);
+        localStorage.setItem("user_id", res?.data?.user_id);
         router.push("/");
       }
     },

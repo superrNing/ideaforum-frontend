@@ -8,11 +8,23 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { slice } from "ramda";
 import * as dayjs from "dayjs";
+import { TableContainer } from "@mui/material";
+import Paper from "@mui/material/Paper";
 
 export default function CommentsList({ data = [] }) {
   return (
-    <div className="pt-6">
-      <List sx={{ width: "100%", minWidth: 360, bgcolor: "background.paper" }}>
+    <TableContainer
+      className="mt-6 no-scrollbar"
+      component={Paper}
+      sx={{ maxHeight: "60vh" }}
+    >
+      <List
+        sx={{
+          width: "100%",
+          minWidth: 360,
+          bgcolor: "background.paper",
+        }}
+      >
         {data?.map((i, index) => {
           return (
             <div key={i.id}>
@@ -48,6 +60,6 @@ export default function CommentsList({ data = [] }) {
           );
         })}
       </List>
-    </div>
+    </TableContainer>
   );
 }

@@ -6,3 +6,9 @@ export const comments = async (params?: any) => {
   const res = await request.get(base_url, { params });
   return res;
 };
+
+export const addComment = async (params?: any) => {
+  const base_url = "/api/comments";
+  const res = await request.post(base_url, params);
+  return res;
+};

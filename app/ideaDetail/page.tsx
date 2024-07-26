@@ -1,8 +1,9 @@
 "use client";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { idea } from "@/app/api/ideas";
-import { likes } from "@/app/api/likes";
+import { likes, addLike, deleteLike } from "@/app/api/likes";
 import { comments } from "@/app/api/comments";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -22,13 +23,16 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { slice } from "ramda";
 import CommentsList from "./comment";
 import * as dayjs from "dayjs";
+import toast from "react-hot-toast";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import AddComment from "./addComment";
 var calendar = require("dayjs/plugin/calendar");
 dayjs.extend(calendar);
 export default function Page() {
   const params = useSearchParams();
   const idea_id = params?.get("idea_id");
+  const [commentVisible, setCommentVisible] = useState<boolean>(false);
 
-  // const { id, name } = router.query;
   const { data, refetch } = useQuery({
     queryKey: ["ideas", idea_id],
     queryFn: () => {
@@ -39,7 +43,7 @@ export default function Page() {
   const { data: likesData, refetch: likeRefetch } = useQuery({
     queryKey: ["likes", idea_id],
     queryFn: () => {
-      return likes({ idea_id });
+      return likes({ idea_id, user_id: localStorage.getItem("user_id") });
     },
   });
   const { data: commentsData, refetch: commentsRefetch } = useQuery({
@@ -49,9 +53,49 @@ export default function Page() {
     },
   });
   const ideaDetail = data?.data ?? {};
-
+  const liked = likesData?.data?.liked;
   const commentsList = commentsData?.data?.comments ?? [];
+  const like = useMutation({
+    mutationFn: addLike,
+    onSuccess: async (res) => {
+      console.log(res, "res");
 
+      if (res?.status === 201) {
+        toast.success("Liked");
+        likeRefetch && likeRefetch();
+      }
+    },
+    onError: (error) => {
+      toast.error("Something Wrong");
+      console.log(error, "error");
+    },
+  });
+
+  const dislike = useMutation({
+    mutationFn: deleteLike,
+    onSuccess: async (res) => {
+      console.log(res, "res");
+
+      if (res?.status === 200) {
+        toast.success("Disliked");
+        likeRefetch && likeRefetch();
+      }
+    },
+    onError: (error) => {
+      toast.error("Something Wrong");
+      console.log(error, "error");
+    },
+  });
+
+  const addLikes = () => {
+    const params = {
+      user_id: localStorage.getItem("user_id"),
+      idea_id,
+    };
+    !liked ? like.mutate(params) : dislike.mutate(params);
+  };
+
+  // console.log("likesData,", likesData);
   return (
     <>
       <Card sx={{ minWidth: 345 }}>
@@ -80,13 +124,22 @@ export default function Page() {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+            <FavoriteIcon
+              color={liked ? "error" : "inherit"}
+              onClick={addLikes}
+            />
           </IconButton>
           <IconButton aria-label="share">
-            <ShareIcon />
+            <ChatBubbleOutlineIcon onClick={() => setCommentVisible(true)} />
           </IconButton>
         </CardActions>
       </Card>
+      <AddComment
+        idea={ideaDetail}
+        visible={commentVisible}
+        refetch={commentsRefetch}
+        setVisible={setCommentVisible}
+      />
       <CommentsList data={commentsList || []} />
     </>
   );
