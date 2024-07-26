@@ -26,6 +26,8 @@ import { ideas } from "@/app/api/ideas";
 import Link from "next/link";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 export default async function Page() {
   const { data, refetch } = useQuery({
     queryKey: ["ideas"],
@@ -86,10 +88,10 @@ export default async function Page() {
                     {row.comments_count}
                   </TableCell>
                   <TableCell>
-                    {dayjs(row.created_at).format("DD/MM/YYYY")}
+                    {dayjs.utc(row.created_at).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell>
-                    {dayjs(row.updated_at).format("DD/MM/YYYY")}
+                    {dayjs.utc(row.updated_at).format("DD/MM/YYYY")}
                   </TableCell>
                 </TableRow>
               ))}

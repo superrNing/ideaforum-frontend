@@ -5,10 +5,10 @@ import clsx from "clsx";
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: "Home", href: "/" },
-  {
-    name: "todo",
-    href: "/todo",
-  },
+  // {
+  //   name: "todo",
+  //   href: "/todo",
+  // },
   { name: "New Idea", href: "/newIdea" },
 ];
 import Link from "next/link";

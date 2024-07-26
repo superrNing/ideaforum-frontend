@@ -1,4 +1,5 @@
 "use client";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -24,14 +25,17 @@ import { slice } from "ramda";
 import CommentsList from "./comment";
 import * as dayjs from "dayjs";
 import toast from "react-hot-toast";
+import EditIcon from "@mui/icons-material/Edit";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AddComment from "./addComment";
+import EditIdea from "./editIdea";
 var calendar = require("dayjs/plugin/calendar");
 dayjs.extend(calendar);
 export default function Page() {
   const params = useSearchParams();
   const idea_id = params?.get("idea_id");
   const [commentVisible, setCommentVisible] = useState<boolean>(false);
+  const [editVisible, setEditVisible] = useState<boolean>(false);
 
   const { data, refetch } = useQuery({
     queryKey: ["ideas", idea_id],
@@ -55,6 +59,9 @@ export default function Page() {
   const ideaDetail = data?.data ?? {};
   const liked = likesData?.data?.liked;
   const commentsList = commentsData?.data?.comments ?? [];
+
+  const showEdit = ideaDetail.user_id == localStorage.getItem("user_id");
+
   const like = useMutation({
     mutationFn: addLike,
     onSuccess: async (res) => {
@@ -106,12 +113,16 @@ export default function Page() {
             </Avatar>
           }
           action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
+            showEdit ? (
+              <IconButton aria-label="settings">
+                <EditIcon onClick={() => setEditVisible(true)} />
+              </IconButton>
+            ) : (
+              ""
+            )
           }
           title={ideaDetail?.user?.name ?? ""}
-          subheader={dayjs(ideaDetail?.user?.created_at ?? "").calendar()}
+          subheader={dayjs(ideaDetail?.created_at ?? "").calendar()}
         />
 
         <CardContent>
@@ -140,7 +151,13 @@ export default function Page() {
         refetch={commentsRefetch}
         setVisible={setCommentVisible}
       />
-      <CommentsList data={commentsList || []} />
+      <EditIdea
+        idea={ideaDetail}
+        visible={editVisible}
+        refetch={refetch}
+        setVisible={setEditVisible}
+      />
+      {commentsList.length ? <CommentsList data={commentsList || []} /> : ""}
     </>
   );
 }
