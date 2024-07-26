@@ -29,6 +29,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AddComment from "./addComment";
 import EditIdea from "./editIdea";
+import Tooltip from "@mui/material/Tooltip";
+
 var calendar = require("dayjs/plugin/calendar");
 dayjs.extend(calendar);
 export default function Page() {
@@ -114,9 +116,11 @@ export default function Page() {
           }
           action={
             showEdit ? (
-              <IconButton aria-label="settings">
-                <EditIcon onClick={() => setEditVisible(true)} />
-              </IconButton>
+              <Tooltip title="Edit">
+                <IconButton aria-label="settings">
+                  <EditIcon onClick={() => setEditVisible(true)} />
+                </IconButton>
+              </Tooltip>
             ) : (
               ""
             )
@@ -134,15 +138,19 @@ export default function Page() {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon
-              color={liked ? "error" : "inherit"}
-              onClick={addLikes}
-            />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ChatBubbleOutlineIcon onClick={() => setCommentVisible(true)} />
-          </IconButton>
+          <Tooltip title="Like">
+            <IconButton aria-label="add to favorites">
+              <FavoriteIcon
+                color={liked ? "error" : "inherit"}
+                onClick={addLikes}
+              />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Comment">
+            <IconButton aria-label="Comment">
+              <ChatBubbleOutlineIcon onClick={() => setCommentVisible(true)} />
+            </IconButton>
+          </Tooltip>
         </CardActions>
       </Card>
       <AddComment
