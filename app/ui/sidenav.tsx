@@ -5,7 +5,7 @@ import Dialog from "@/app/ui/dialog";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 export default function SideNav() {
   const [dialogVisible, setDialogVisible] = useState<boolean>(false);
   const router = useRouter();
@@ -39,7 +39,11 @@ export default function SideNav() {
         </button>
 
         <Dialog
-          title="SIGN OUT"
+          title={
+            <>
+              <ErrorOutlineIcon color="warning" className="pb-1" /> SIGN OUT
+            </>
+          }
           visible={dialogVisible}
           setVisible={setDialogVisible}
           handleConfirm={handleLogOut}

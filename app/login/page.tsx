@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -17,9 +17,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useMutation } from "@tanstack/react-query";
 import { userLogin, UserLoginParams } from "@/app/api/login";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar } from "@mui/material";
 import { useRouter } from "next/navigation";
-
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import toast from "react-hot-toast";
 function Copyright(props: any) {
   return (
@@ -30,10 +30,7 @@ function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
+      <Link color="inherit">Group 2</Link> {new Date().getFullYear()}
       {"."}
     </Typography>
   );
@@ -46,10 +43,14 @@ export default function SignInSide() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
   const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -58,6 +59,7 @@ export default function SignInSide() {
     if (reason === "clickaway") {
       return;
     }
+    setOpen(false);
   };
 
   const mutation = useMutation({
@@ -141,12 +143,20 @@ export default function SignInSide() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link
+                  onClick={() => setOpen(true)}
+                  className="cursor-pointer"
+                  variant="body2"
+                >
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link
+                  onClick={() => setOpen(true)}
+                  className="cursor-pointer"
+                  variant="body2"
+                >
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
@@ -154,6 +164,19 @@ export default function SignInSide() {
             <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          message={
+            <>
+              <SentimentSatisfiedAltIcon className="mb-1" /> What are you
+              expecting?
+            </>
+          }
+          // action={action}
+        />
       </Container>
     </ThemeProvider>
   );
