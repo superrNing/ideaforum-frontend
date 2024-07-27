@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 import SideNav from "@/app/ui/sidenav";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -31,9 +32,12 @@ export default function RootLayout({
   const user_token = localStorage.getItem("user_token");
   const router = useRouter();
 
-  if (!user_token) {
-    router.push("/login");
-  }
+  useEffect(() => {
+    if (!user_token) {
+      router.push("/login");
+    }
+  }, [user_token]);
+
   return (
     <html lang="en">
       <body className={inter.className}>

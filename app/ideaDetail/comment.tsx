@@ -10,8 +10,13 @@ import { slice } from "ramda";
 import * as dayjs from "dayjs";
 import { TableContainer } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { red } from "@mui/material/colors";
+import { getRandomColorByLetter } from "@/app/utils/randomColor";
 
-export default function CommentsList({ data = [] }) {
+export default function CommentsList(props: any) {
   return (
     <TableContainer
       className="mt-6 no-scrollbar"
@@ -25,15 +30,36 @@ export default function CommentsList({ data = [] }) {
           bgcolor: "background.paper",
         }}
       >
-        {data?.map((i, index) => {
+        {props?.data?.map((i, index) => {
           return (
             <div key={i.id}>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
-                  <Avatar>{slice(0, 1, i?.user?.name ?? "")}</Avatar>
+                  <Avatar
+                    sx={{ bgcolor: getRandomColorByLetter(i?.user?.name) }}
+                  >
+                    {slice(0, 1, i?.user?.name ?? "")}
+                  </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={i?.user?.name}
+                  primary={
+                    <div className="flex justify-between">
+                      <span className="flex flex-col justify-center">
+                        {i?.user?.name}
+                      </span>
+                      {i?.user_id == localStorage.getItem("user_id") ? (
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="settings" className="p-0 m-0">
+                            <DeleteOutlineIcon
+                              onClick={() => props?.handleDeleteComments(i?.id)}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  }
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -51,7 +77,7 @@ export default function CommentsList({ data = [] }) {
                   }
                 />
               </ListItem>
-              {index !== data?.length - 1 ? (
+              {index !== props?.data?.length - 1 ? (
                 <Divider variant="inset" component="li" />
               ) : (
                 ""

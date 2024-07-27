@@ -6,20 +6,18 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { idea } from "@/app/api/ideas";
 import { likes, addLike, deleteLike } from "@/app/api/likes";
 import { deleteIdea } from "@/app/api/ideas";
-import { comments } from "@/app/api/comments";
+import { comments, deleteComment } from "@/app/api/comments";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
+import { getRandomColorByLetter } from "@/app/utils/randomColor";
+
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { slice } from "ramda";
 import CommentsList from "./comment";
 import * as dayjs from "dayjs";
@@ -32,11 +30,18 @@ import Tooltip from "@mui/material/Tooltip";
 import Dialog from "@/app/ui/dialog";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useRouter } from "next/navigation";
+type deleteTypeEmun = "idea" | "comment";
 
 var calendar = require("dayjs/plugin/calendar");
 dayjs.extend(calendar);
 export default function Page() {
-  const [dialogVisible, setDialogVisible] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState<boolean>(false);
+  const [deleteCommentId, setDeleteCommentId] = useState("");
+  const [deleteType, setDeleteType] = useState<deleteTypeEmun>("idea");
+  const [dialogContent, setDialogContent] = useState<string>(
+    "Are you sure you want to delete your idea?"
+  );
+  const [dialogTitle, setDialogTitle] = useState<string>("Delete Your Idea");
   const params = useSearchParams();
   const idea_id = params?.get("idea_id");
   const [commentVisible, setCommentVisible] = useState<boolean>(false);
@@ -115,8 +120,41 @@ export default function Page() {
     },
   });
 
-  const destoryIdea = () => {
-    removeIdea.mutate({ idea_id });
+  const removeComment = useMutation({
+    mutationFn: deleteComment,
+    onSuccess: async (res) => {
+      console.log(res, "res");
+      if (res?.status === 200) {
+        toast.success("Your Comment Has Been Deleted!");
+        setDialogVisible(false);
+        commentsRefetch();
+      }
+    },
+    onError: (error) => {
+      toast.error("Something Wrong");
+      console.log(error, "error");
+    },
+  });
+
+  const destoryIdeaOrComment = () => {
+    deleteType === "idea"
+      ? removeIdea.mutate({ idea_id })
+      : removeComment.mutate({ comment_id: deleteCommentId });
+  };
+  const handleDeleteIdea = () => {
+    setDeleteType("idea");
+    setDialogContent("Are you sure you want to delete your idea?");
+    setDialogTitle("Delete your Idea");
+    setDialogVisible(true);
+  };
+
+  const handleDeleteComment = (id) => {
+    // console.log("id", id);
+    setDeleteType("comment");
+    setDeleteCommentId(id);
+    setDialogContent("Are you sure you want to delete your comment?");
+    setDialogTitle("Delete your Comment");
+    setDialogVisible(true);
   };
 
   const addLikes = () => {
@@ -133,7 +171,12 @@ export default function Page() {
       <Card sx={{ minWidth: 345 }}>
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+            <Avatar
+              sx={{
+                bgcolor: getRandomColorByLetter(ideaDetail?.user?.name),
+              }}
+              aria-label="recipe"
+            >
               {slice(0, 1, ideaDetail?.user?.name ?? "")}
             </Avatar>
           }
@@ -142,7 +185,7 @@ export default function Page() {
               <>
                 <Tooltip title="Delete">
                   <IconButton aria-label="settings">
-                    <DeleteOutlineIcon onClick={() => setDialogVisible(true)} />
+                    <DeleteOutlineIcon onClick={handleDeleteIdea} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Edit">
@@ -159,11 +202,11 @@ export default function Page() {
           subheader={dayjs(ideaDetail?.created_at ?? "").calendar()}
         />
         <Dialog
-          title="Delete Your Idea"
+          title={dialogTitle}
           visible={dialogVisible}
           setVisible={setDialogVisible}
-          handleConfirm={destoryIdea}
-          content="Are you sure you want to delete your idea?"
+          handleConfirm={destoryIdeaOrComment}
+          content={dialogContent}
         />
 
         <CardContent>
@@ -202,7 +245,15 @@ export default function Page() {
         refetch={refetch}
         setVisible={setEditVisible}
       />
-      {commentsList.length ? <CommentsList data={commentsList || []} /> : ""}
+      {commentsList.length ? (
+        <CommentsList
+          handleDeleteComments={handleDeleteComment}
+          setVisible={setDialogVisible}
+          data={commentsList || []}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }
