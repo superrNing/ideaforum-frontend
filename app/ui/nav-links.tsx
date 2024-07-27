@@ -4,7 +4,7 @@ import clsx from "clsx";
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: "IDEA LIST", href: "/" },
+  { name: "IDEA LIST", href: "/dashboard" },
   // {
   //   name: "todo",
   //   href: "/todo",

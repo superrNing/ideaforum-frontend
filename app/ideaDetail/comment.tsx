@@ -21,7 +21,7 @@ export default function CommentsList(props: any) {
     <TableContainer
       className="mt-6 no-scrollbar"
       component={Paper}
-      sx={{ maxHeight: "60vh" }}
+      sx={{ maxHeight: "56vh" }}
     >
       <List
         sx={{

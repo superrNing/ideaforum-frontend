@@ -49,6 +49,7 @@ export default function SignInSide() {
     watch,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -59,8 +60,6 @@ export default function SignInSide() {
     }
   };
 
-  const router = useRouter();
-
   const mutation = useMutation({
     mutationFn: userLogin,
     onSuccess: async (res) => {
@@ -70,7 +69,7 @@ export default function SignInSide() {
         toast.success("logged in!");
         localStorage.setItem("user_token", res?.data?.token);
         localStorage.setItem("user_id", res?.data?.user_id);
-        router.push("/");
+        router.push("/dashboard");
       }
     },
     onError: (error) => {
