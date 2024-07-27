@@ -9,6 +9,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ```
 
+create .env.local file in root,
+
+```bash
+NEXT_PUBLIC_API_BASE_URL=your api address
+
+```
+
 First, run the development server:
 
 ```bash
