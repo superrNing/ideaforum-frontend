@@ -42,7 +42,7 @@ export default function AddIdea() {
       if (res?.status === 201) {
         toast.success("Created!");
         reset();
-        router.push("/");
+        router.push("/dashboard");
       }
     },
     onError: (error) => {
@@ -99,7 +99,6 @@ export default function AddIdea() {
               rows={8}
               label="Description"
               id="description"
-              autoComplete="current-password"
               {...register("description", { required: true })}
             />
 

@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -24,7 +24,13 @@ export default function AddComment({ idea, visible, refetch, setVisible }) {
     reset,
     formState: { errors },
   } = useForm();
-
+  const [inputRef, setInputRef] = useState(null);
+  // auto focus not work in dialog, focus it after create dom
+  useEffect(() => {
+    if (inputRef) {
+      inputRef?.focus();
+    }
+  }, [inputRef]);
   const mutation = useMutation({
     mutationFn: addComment,
     onSuccess: async (res) => {
@@ -53,6 +59,7 @@ export default function AddComment({ idea, visible, refetch, setVisible }) {
   };
 
   const handleClose = () => {
+    reset();
     setVisible(false);
   };
 
@@ -72,12 +79,8 @@ export default function AddComment({ idea, visible, refetch, setVisible }) {
         >
           <DialogTitle>Add Comment</DialogTitle>
           <DialogContent>
-            {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText> */}
             <TextField
-              autoFocus
+              inputRef={setInputRef}
               required
               margin="dense"
               id="comment_text"

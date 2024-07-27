@@ -23,7 +23,7 @@ export default function Search({
     //   params.delete("query");
     // }
     // replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  }, 500);
   return (
     <div className="relative flex flex-1 flex-shrink-0">
       <label htmlFor="search" className="sr-only">
