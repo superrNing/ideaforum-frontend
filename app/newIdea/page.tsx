@@ -28,7 +28,7 @@ export default function AddIdea() {
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -41,11 +41,13 @@ export default function AddIdea() {
 
       if (res?.status === 201) {
         toast.success("Created!");
+        reset();
         router.push("/");
       }
     },
     onError: (error) => {
       toast.error("Something Wrong");
+      reset();
       console.log(error, "error");
     },
   });

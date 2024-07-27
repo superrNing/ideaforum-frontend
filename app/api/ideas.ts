@@ -34,3 +34,10 @@ export const updateIdea = async (params?: any) => {
   const res = await request.put(base_url, params);
   return res;
 };
+
+// remove idea
+export const deleteIdea = async (params?: any) => {
+  const base_url = "/api/ideas";
+  const res = await request.delete(base_url, { params });
+  return res;
+};

@@ -14,7 +14,7 @@ export const addLike = async (params?: any) => {
   return res;
 };
 
-// add like
+// remove like
 export const deleteLike = async (params?: any) => {
   const base_url = "/api/likes";
   const res = await request.delete(base_url, { params });

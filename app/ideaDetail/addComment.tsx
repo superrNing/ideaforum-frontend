@@ -39,6 +39,7 @@ export default function AddComment({ idea, visible, refetch, setVisible }) {
     },
     onError: (error) => {
       toast.error("Something Wrong");
+      reset();
       console.log(error, "error");
     },
   });

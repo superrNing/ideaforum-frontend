@@ -5,14 +5,13 @@ import { useSearchParams } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { idea } from "@/app/api/ideas";
 import { likes, addLike, deleteLike } from "@/app/api/likes";
+import { deleteIdea } from "@/app/api/ideas";
 import { comments } from "@/app/api/comments";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -30,15 +29,19 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AddComment from "./addComment";
 import EditIdea from "./editIdea";
 import Tooltip from "@mui/material/Tooltip";
+import Dialog from "@/app/ui/dialog";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useRouter } from "next/navigation";
 
 var calendar = require("dayjs/plugin/calendar");
 dayjs.extend(calendar);
 export default function Page() {
+  const [dialogVisible, setDialogVisible] = useState(false);
   const params = useSearchParams();
   const idea_id = params?.get("idea_id");
   const [commentVisible, setCommentVisible] = useState<boolean>(false);
   const [editVisible, setEditVisible] = useState<boolean>(false);
-
+  const router = useRouter();
   const { data, refetch } = useQuery({
     queryKey: ["ideas", idea_id],
     queryFn: () => {
@@ -96,6 +99,26 @@ export default function Page() {
     },
   });
 
+  const removeIdea = useMutation({
+    mutationFn: deleteIdea,
+    onSuccess: async (res) => {
+      console.log(res, "res");
+      if (res?.status === 200) {
+        toast.success("Your Idea Has Been Deleted!");
+        setDialogVisible(false);
+        router.push("/");
+      }
+    },
+    onError: (error) => {
+      toast.error("Something Wrong");
+      console.log(error, "error");
+    },
+  });
+
+  const destoryIdea = () => {
+    removeIdea.mutate({ idea_id });
+  };
+
   const addLikes = () => {
     const params = {
       user_id: localStorage.getItem("user_id"),
@@ -116,17 +139,31 @@ export default function Page() {
           }
           action={
             showEdit ? (
-              <Tooltip title="Edit">
-                <IconButton aria-label="settings">
-                  <EditIcon onClick={() => setEditVisible(true)} />
-                </IconButton>
-              </Tooltip>
+              <>
+                <Tooltip title="Delete">
+                  <IconButton aria-label="settings">
+                    <DeleteOutlineIcon onClick={() => setDialogVisible(true)} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit">
+                  <IconButton aria-label="settings">
+                    <EditIcon onClick={() => setEditVisible(true)} />
+                  </IconButton>
+                </Tooltip>
+              </>
             ) : (
               ""
             )
           }
           title={ideaDetail?.user?.name ?? ""}
           subheader={dayjs(ideaDetail?.created_at ?? "").calendar()}
+        />
+        <Dialog
+          title="Delete Your Idea"
+          visible={dialogVisible}
+          setVisible={setDialogVisible}
+          handleConfirm={destoryIdea}
+          content="Are you sure you want to delete your idea?"
         />
 
         <CardContent>
