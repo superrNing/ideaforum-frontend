@@ -1,5 +1,4 @@
 "use client";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -9,7 +8,6 @@ import { deleteIdea } from "@/app/api/ideas";
 import { comments, deleteComment } from "@/app/api/comments";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
@@ -91,8 +89,6 @@ export default function Page() {
   const dislike = useMutation({
     mutationFn: deleteLike,
     onSuccess: async (res) => {
-      console.log(res, "res");
-
       if (res?.status === 200) {
         toast.success("Disliked");
         likeRefetch && likeRefetch();
@@ -107,11 +103,10 @@ export default function Page() {
   const removeIdea = useMutation({
     mutationFn: deleteIdea,
     onSuccess: async (res) => {
-      console.log(res, "res");
       if (res?.status === 200) {
         toast.success("Your Idea Has Been Deleted!");
         setDialogVisible(false);
-        router.push("/");
+        router.push("/dashboard");
       }
     },
     onError: (error) => {
@@ -123,7 +118,6 @@ export default function Page() {
   const removeComment = useMutation({
     mutationFn: deleteComment,
     onSuccess: async (res) => {
-      console.log(res, "res");
       if (res?.status === 200) {
         toast.success("Your Comment Has Been Deleted!");
         setDialogVisible(false);
