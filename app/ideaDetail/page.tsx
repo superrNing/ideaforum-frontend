@@ -193,7 +193,9 @@ export default function Page() {
             )
           }
           title={ideaDetail?.user?.name ?? ""}
-          subheader={dayjs(ideaDetail?.created_at ?? "").calendar()}
+          subheader={`Updated At ${dayjs(
+            ideaDetail?.updated_at ?? ""
+          ).calendar()}`}
         />
         <Dialog
           title={dialogTitle}
