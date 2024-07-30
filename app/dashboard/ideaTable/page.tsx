@@ -12,14 +12,14 @@ import {
 import Paper from "@mui/material/Paper";
 import * as dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { ideas } from "@/app/api/ideas";
 import Link from "next/link";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
-const utc = require("dayjs/plugin/utc");
-dayjs.extend(utc);
+// const utc = require("dayjs/plugin/utc");
+// dayjs.extend(utc);
 export default function Page({ searchKey }: { searchKey: string }) {
   // const [param, setParam] = useState<object>();
   const { data, isLoading } = useQuery({
@@ -91,10 +91,10 @@ export default function Page({ searchKey }: { searchKey: string }) {
                     {row.comments_count}
                   </TableCell>
                   <TableCell>
-                    {dayjs.utc(row.created_at).format("DD/MM/YYYY")}
+                    {dayjs(row.created_at).format("DD/MM/YYYY")}
                   </TableCell>
                   <TableCell>
-                    {dayjs.utc(row.updated_at).format("DD/MM/YYYY")}
+                    {dayjs(row.updated_at).format("DD/MM/YYYY")}
                   </TableCell>
                 </TableRow>
               ))
