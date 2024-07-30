@@ -4,6 +4,7 @@ export type CreateUserParams = {
   email: string;
   password: string;
   name: string;
+  password_confirmation: string;
 };
 
 export type UserLoginParams = {
@@ -18,7 +19,13 @@ export const userLogin = async (params: UserLoginParams) => {
 };
 
 export const createUser = async (params: CreateUserParams) => {
-  const base_url = "";
+  const base_url = "/register";
+  const res = await request.post(base_url, params);
+  return res;
+};
+
+export const logoutUser = async (params: CreateUserParams) => {
+  const base_url = "/logout";
   const res = await request.post(base_url, params);
   return res;
 };
