@@ -28,6 +28,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Dialog from "@/app/ui/dialog";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useRouter } from "next/navigation";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 type deleteTypeEmun = "idea" | "comment";
 
 var calendar = require("dayjs/plugin/calendar");
@@ -162,6 +163,13 @@ export default function Page() {
   // console.log("likesData,", likesData);
   return (
     <>
+      <div className="-mt-8 mb-1">
+        <Tooltip title="Back">
+          <IconButton aria-label="settings">
+            <ArrowBackIosNewIcon onClick={() => router.back()} />
+          </IconButton>
+        </Tooltip>
+      </div>
       <Card sx={{ minWidth: 345 }}>
         <CardHeader
           avatar={
