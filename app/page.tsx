@@ -9,20 +9,25 @@ export default function Page() {
       <CssBaseline />
       <Container fixed>
         <Box
-          sx={{ bgcolor: "#cfe8fc", height: "80vh" }}
+          sx={{  height: "80vh",backgroundImage: `url('/img/background.jpg')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center', }}
           className="flex flex-col justify-center items-center"
         >
           <Typography display="block" variant="h3" gutterBottom>
             WELCOME
           </Typography>
-          <Typography variant="caption" display="block" gutterBottom>
-            Too Tired To Do The Design
+          <Typography variant="h5" display="block" gutterBottom>
+            To our final Idea Forum project
           </Typography>
           <Typography variant="caption" display="block" gutterBottom>
-            So
+          Lu, Ning
           </Typography>
           <Typography variant="caption" display="block" gutterBottom>
-            Just Welcome
+          Liu, Zhongrui
+          </Typography>
+          <Typography variant="caption" display="block" gutterBottom>
+          Xie, Xiaorui
           </Typography>
         </Box>
       </Container>
